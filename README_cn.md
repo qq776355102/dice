@@ -33,54 +33,166 @@ eosbet骰子游戏
 先决条件
 电子钱包必须解锁并至少拥有以下私钥
 
+
 5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3 5Jmsawgsp1tQ3GD6JyGCwy1dcvqKZgX6ugMVMdjirx85iv5VyPR
 
+
 上传bios合同
+
+
+
 cleos set contract eosio build / contracts / eosio.bios -p eosio
+
+
 Ceate eosio.token帐户
-cleos create account eosio eosio.token EOS7ijWCBmoXBi3CgtK7DJxentZZeTkeUnaSDvyro9dq7Sd1C3dC4 EOS7ijWCBmoXBi3CgtK7DJxentZZeTkeUnaSDvyro9dq7Sd1C3dC4
+
+
+
+cleos create account eosio eosio.token
+EOS7ijWCBmoXBi3CgtK7DJxentZZeTkeUnaSDvyro9dq7Sd1C3dC4 EOS7ijWCBmoXBi3CgtK7DJxentZZeTkeUnaSDvyro9dq7Sd1C3dC4
+
+
 将eosio.token合同设置为eosio.token帐户
+
+
+
 cleos set contract eosio.token build / contracts / eosio.token -p eosio.token
+
+
 创建骰子帐户
-cleos create account eosio dice EOS7ijWCBmoXBi3CgtK7DJxentZZeTkeUnaSDvyro9dq7Sd1C3dC4 EOS7ijWCBmoXBi3CgtK7DJxentZZeTkeUnaSDvyro9dq7Sd1C3dC4
+
+
+
+cleos create account eosio dice
+EOS7ijWCBmoXBi3CgtK7DJxentZZeTkeUnaSDvyro9dq7Sd1C3dC4 EOS7ijWCBmoXBi3CgtK7DJxentZZeTkeUnaSDvyro9dq7Sd1C3dC4
+
+
 将骰子合同设置为骰子帐户
 cleos 设置合同骰子建立/合同/骰子-p骰子
 创建本机EOS令牌
+
+
+
 cleos push action eosio.token create ' [“eosio”，“1000000000.0000 EOS”，0,0,0] '- p eosio.token
+
+
 创建alice帐户
-cleos create account eosio alice EOS7ijWCBmoXBi3CgtK7DJxentZZeTkeUnaSDvyro9dq7Sd1C3dC4 EOS7ijWCBmoXBi3CgtK7DJxentZZeTkeUnaSDvyro9dq7Sd1C3dC4
+
+
+
+cleos create account eosio alice
+EOS7ijWCBmoXBi3CgtK7DJxentZZeTkeUnaSDvyro9dq7Sd1C3dC4 EOS7ijWCBmoXBi3CgtK7DJxentZZeTkeUnaSDvyro9dq7Sd1C3dC4
+
+
 创建bob帐户
-cleos create account eosio bob EOS7ijWCBmoXBi3CgtK7DJxentZZeTkeUnaSDvyro9dq7Sd1C3dC4 EOS7ijWCBmoXBi3CgtK7DJxentZZeTkeUnaSDvyro9dq7Sd1C3dC4
-向爱丽丝发出1000 EOS
+
+
+
+cleos create account eosio bob
+EOS7ijWCBmoXBi3CgtK7DJxentZZeTkeUnaSDvyro9dq7Sd1C3dC4 EOS7ijWCBmoXBi3CgtK7DJxentZZeTkeUnaSDvyro9dq7Sd1C3dC4
+
+
+向alice发出1000 EOS
+
+
+
 cleos push action eosio.token issue ' [“alice”，“1000.0000 EOS”，“”] ' - p eosio
+
+
 发出1000 EOS到bob
+
+
+
 cleos push action eosio.token issue ' [“bob”，“1000.0000 EOS”，“”] ' - p eosio
+
+
 允许骰子合同代表alice进行转账(存款)
-cleos set account permission alice active '{"threshold": 1,"keys": [{"key": "EOS7ijWCBmoXBi3CgtK7DJxentZZeTkeUnaSDvyro9dq7Sd1C3dC4","weight": 1}],"accounts": [{"permission":{"actor":"dice","permission":"active"},"weight":1}]}' owner -p alice
+
+
+
+cleos set account permission alice active
+'{"threshold": 1,"keys": [{"key": "EOS7ijWCBmoXBi3CgtK7DJxentZZeTkeUnaSDvyro9dq7Sd1C3dC4",
+"weight": 1}],"accounts": [{"permission":{"actor":"dice","permission":"active"},"weight":1}]}' owner -p alice
+
+
 允许骰子合同代表bob进行转账(保证金)
-cleos set account permission bob active '{"threshold": 1,"keys": [{"key": "EOS7ijWCBmoXBi3CgtK7DJxentZZeTkeUnaSDvyro9dq7Sd1C3dC4","weight": 1}],"accounts": [{"permission":{"actor":"dice","permission":"active"},"weight":1}]}' owner -p bob
+
+
+
+cleos set account permission bob active '{"threshold": 1,"keys": [{"key":
+"EOS7ijWCBmoXBi3CgtK7DJxentZZeTkeUnaSDvyro9dq7Sd1C3dC4","weight": 1}],"accounts":
+[{"permission":{"actor":"dice","permission":"active"},"weight":1}]}' owner -p bob
+
+
+
 Alice将100 EOS存入骰子合同
+
+
+
 cleos push action dice deposit ' [“alice”，“100.0000 EOS”] '- p alice
+
+
 Bob将100 EOS存入骰子合同
+
+
+
 cleos push action dice deposit ' [“bob”，“100.0000 EOS”] ' - p bob
-爱丽丝生成一个秘密
+
+
+alice生成一个secret
+
+
+
 openssl rand 32 
 -hex 28349b1d4bcdc9905e4ef9719019e55743c84efa0c5e9a0b077f0b54fcd84905
-爱丽丝生成sha256（秘密）
+
+
+alice生成sha256（secret）
+
+
+
 echo -n '28349b1d4bcdc9905e4ef9719019e55743c84efa0c5e9a0b077f0b54fcd84905' | xxd -r -p | sha256sum -b | awk '{print $1}'
 d533f24d6f28ddcef3f066474f7b8355383e485681ba8e793e037f5cf36e4883
+
+
 Alice下注3个EOS
-cleos push action dice offerbet '[ "3.0000 EOS", "alice", "d533f24d6f28ddcef3f066474f7b8355383e485681ba8e793e037f5cf36e4883" ]' -p alice
-鲍勃生成一个秘密
+
+
+
+cleos push action dice offerbet '[ "3.0000 EOS",
+"alice", "d533f24d6f28ddcef3f066474f7b8355383e485681ba8e793e037f5cf36e4883" ]' -p alice
+
+
+
+bob生成一个secret
+
+
+
 openssl rand 32 
 -hex 15fe76d25e124b08feb835f12e00a879bd15666a33786e64b655891fba7d6c12
-鲍勃生成sha256（秘密）
+
+
+bob生成sha256（secret）
+
+
+
 echo -n '15fe76d25e124b08feb835f12e00a879bd15666a33786e64b655891fba7d6c12' | xxd -r -p | sha256sum -b | awk '{print $1}'
 50ed53fcdaf27f88d51ea4e835b1055efe779bb87e6cfdff47d28c88ffb27129
 
-鲍勃也下注3个EOS（游戏开始）
-cleos push action dice offerbet ' [“3.0000 EOS”，“bob”，“50ed53fcdaf27f88d51ea4e835b1055efe779bb87e6cfdff47d28c88ffb27129”] '- p bob
+
+bob也下注3个EOS（游戏开始）
+
+
+
+cleos push action dice offerbet
+' [“3.0000 EOS”，“bob”，“50ed53fcdaf27f88d51ea4e835b1055efe779bb87e6cfdff47d28c88ffb27129”] '- p bob
+
+
+
 游戏开始后立即进行骰子合约表
+
+
+
 cleos get table dice dice account
 {
   "rows": [{
@@ -115,9 +227,21 @@ cleos get table dice dice game
   ],
   "more": false
 }
-鲍勃透露了他的秘密
-cleos push action dice reveal '[ "50ed53fcdaf27f88d51ea4e835b1055efe779bb87e6cfdff47d28c88ffb27129", "15fe76d25e124b08feb835f12e00a879bd15666a33786e64b655891fba7d6c12" ]' -p bob
-鲍勃透露后的游戏表(现在游戏有一个爱丽丝透露的最后期限)
+
+
+
+bob透露了他的秘密
+
+
+
+cleos push action dice reveal '[ "50ed53fcdaf27f88d51ea4e835b1055efe779bb87e6cfdff47d28c88ffb27129",
+"15fe76d25e124b08feb835f12e00a879bd15666a33786e64b655891fba7d6c12" ]' -p bob
+
+
+bob透露后的游戏表(现在游戏有一个alice透露的最后期限)
+
+
+
 cleos get table dice dice game
 {
   "rows": [{
@@ -136,10 +260,22 @@ cleos get table dice dice game
   ],
   "more": false
 }
-爱丽丝揭示了她的秘密（获胜者已确定，游戏被删除）
-cleos push action dice reveal '[ "d533f24d6f28ddcef3f066474f7b8355383e485681ba8e793e037f5cf36e4883", "28349b1d4bcdc9905e4ef9719019e55743c84efa0c5e9a0b077f0b54fcd84905" ]' -p alice
+
+
+
+alice揭示了她的secret（获胜者已确定，游戏被删除）
+
+
+
+cleos push action dice reveal
+'[ "d533f24d6f28ddcef3f066474f7b8355383e485681ba8e793e037f5cf36e4883",
+"28349b1d4bcdc9905e4ef9719019e55743c84efa0c5e9a0b077f0b54fcd84905" ]' -p alice
+
 
 比赛结束后账户余额
+
+
+
  cleos get table dice dice account
 {
   "rows": [{
@@ -156,10 +292,23 @@ cleos push action dice reveal '[ "d533f24d6f28ddcef3f066474f7b8355383e485681ba8e
   ],
   "more": false
 }
-爱丽丝退出她的骰子帐户103 EOS
+
+
+
+alice退出她的骰子帐户103 EOS
+
+
+
 cleos push action dice withdraw ' [“alice”，“103.0000 EOS”] '- p alice
-退出后爱丽丝的平衡
+
+
+退出后alice的余额
+
+
+
 cleos get currency balance eosio.token alice eos
 1003.0000 EOS
 
+---------------------
 
+本文来自 q_776355102 的CSDN 博客 ，全文地址请点击：https://blog.csdn.net/weixin_39842528/article/details/82977769?utm_source=copy 
